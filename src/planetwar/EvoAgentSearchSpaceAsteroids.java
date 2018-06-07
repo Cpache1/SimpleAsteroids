@@ -151,7 +151,7 @@ public class EvoAgentSearchSpaceAsteroids implements  AnnotatedFitnessSpace {
         EvoAlg sliding = new SlidingMeanEDA();
 
         EvoAgent evoAgent = new EvoAgent().setEvoAlg(simpleRMHC, getNEvals(x));
-        // EvoAgent evoAgent = new EvoAgent().setEvoAlg(sliding, getNEvals(x));
+        // EvoAgent_RandOp evoAgent = new EvoAgent_RandOp().setEvoAlg(sliding, getNEvals(x));
         evoAgent.setUseShiftBuffer(useShiftBuffer[x[useShiftBufferIndex]]);
         evoAgent.setSequenceLength(seqLength[x[seqLengthIndex]]);
 

@@ -1,15 +1,15 @@
 package spinbattle.test;
 
-import agents.dummy.DoNothingAgent;
-import agents.dummy.RandomAgent;
 import agents.evo.EvoAgent;
+import controllers.multiPlayer.discountOLMCTS.SingleMCTSPlayer;
+import controllers.singlePlayer.discountOLMCTS.Agent;
 import ggi.agents.EvoAgentFactory;
 import ggi.core.GameRunnerTwoPlayer;
-import ggi.core.SimplePlayerInterface;
-import spinbattle.core.FalseModelAdapter;
 import spinbattle.core.SpinGameStateFactory;
 import spinbattle.params.SpinBattleParams;
 import utilities.ElapsedTimer;
+import agents.coevo.CoEvoAgent;
+import agents.coevo.CoEvoAgentFactory;
 
 public class GeneralGameRunnerTest {
     public static void main(String[] args) {
@@ -17,52 +17,29 @@ public class GeneralGameRunnerTest {
 
         int maxTicks = 2000;
         GameRunnerTwoPlayer runner = new GameRunnerTwoPlayer().setLength(maxTicks);
-        SimplePlayerInterface randomAgent = new RandomAgent();
-        // SimplePlayerInterface p2 = new RandomAgent();
 
-        SimplePlayerInterface doNothingAgent = new DoNothingAgent();
         EvoAgentFactory evoAgentFactory = new EvoAgentFactory();
+        CoEvoAgentFactory coEvoAgentFactory = new CoEvoAgentFactory();
         evoAgentFactory.useShiftBuffer = true;
         evoAgentFactory.mutationRate = 5;
         evoAgentFactory.totalRandomMutation = true;
-        // evoAgentFactory.totalRandomMutation = true
-        EvoAgent evoAgent = evoAgentFactory.getAgent();
-        // evoAgent.setVisual();
-        evoAgent.setSequenceLength(100);
-        runner.setPlayers(evoAgent, doNothingAgent);
+
+        EvoAgent evoAgent = evoAgentFactory.getAgent().setSequenceLength(100);
+
+        CoEvoAgent coEvoAgent = coEvoAgentFactory.getAgent().setSequenceLength(50);
+        //EvoAgent coEvoAgent = evoAgentFactory.getAgent().setSequenceLength(20);
+
+        evoAgent.nEvals = 20;
+        coEvoAgent.nEvals = 40;
+
         SpinGameStateFactory factory = new SpinGameStateFactory();
-        factory.params.maxTicks = maxTicks;
-        // factory.params.transitSpeed = 0;
+        factory.params = new SpinBattleParams();;
 
         runner.setGameFactory(factory);
 
-        // runner.ga
-        // todo: work out why this fails
-        // runner.playGames(20);
-
-        // todo: while this one works
-        for (int i=0; i<10; i++) {
-            factory.params.getRandom().setSeed(i);
-//            evoAgent2.setSequenceLength(50);
-            EvoAgent evoAgent3 = evoAgentFactory.getAgent().setSequenceLength(100);
-            evoAgent3.nEvals = 10;
-            // evoAgent3.setVisual();
-
-            // evoAgentFactory.totalRandomMutation = false;
-            EvoAgent evoAgent1 = evoAgentFactory.getAgent().setSequenceLength(100);
-            // evoAgent1.setVisual();
-            // evoAgent1.useShiftBuffer = false;
-            evoAgent1.nEvals = 10;
-
-            SpinBattleParams params = new SpinBattleParams();
-            // params.gravitationalFieldConstant *= 0;
-            params.transitSpeed = 0.00001;
-
-            params.clampZeroScore = false;
-            FalseModelAdapter falsePlayer = new FalseModelAdapter().setPlayer(evoAgent3).setParams(params);
-
-            // runner.delay = 100;
-            runner.setPlayersWithoutReset(randomAgent, falsePlayer);
+        for (int i=0; i<100; i++) {
+            factory.params.getRandom();//.setSeed(i);
+            runner.setPlayersWithoutReset(evoAgent, coEvoAgent);
             runner.playGame();
             System.out.println(runner.p1Wins + "\t " + runner.p2Wins);
             System.out.println();

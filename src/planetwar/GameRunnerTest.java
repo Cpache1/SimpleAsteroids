@@ -51,9 +51,9 @@ public class GameRunnerTest {
         SimplePlayerInterface opponentModel;
         opponentModel = new DoNothingAgent();
         opponentModel = new RandomAgent();
-        // p2 = new EvoAgent().setEvoAlg(simpleGA, nEvals).setSequenceLength(seqLength).setOpponent(opponentModel);
+        // p2 = new EvoAgent_RandOp().setEvoAlg(simpleGA, nEvals).setSequenceLength(seqLength).setOpponent(opponentModel);
 
-        // p2 = new EvoAgent().setEvoAlg(evoAlg1, nEvals/2).setSequenceLength(seqLength*2).setOpponent(opponentModel);
+        // p2 = new EvoAgent_RandOp().setEvoAlg(evoAlg1, nEvals/2).setSequenceLength(seqLength*2).setOpponent(opponentModel);
         EvoAgent evoAgent2 = new EvoAgent().setEvoAlg(evoAlg1, nEvals2).setSequenceLength(seqLength2).setOpponent(opponentModel);
 
         evoAgent2.setUseShiftBuffer(true);

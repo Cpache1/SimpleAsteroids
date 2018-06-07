@@ -126,6 +126,7 @@ public class GameRunnerTwoPlayer {
         // gameLog.setInitialGrowthRate(gameState.totalGrowthRate());
         int[] actions = new int[2];
         for (int i=0; i<nSteps && !gameState.isTerminal(); i++) {
+
             actions[0] = p1.getAction(gameState.copy(), p1Index);
             actions[1] = p2.getAction(gameState.copy(), p2Index);
             gameState.next(actions);

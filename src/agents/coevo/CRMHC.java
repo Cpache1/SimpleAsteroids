@@ -1,31 +1,33 @@
-package ga;
+package agents.coevo;
 
 import evodef.*;
-import evodef.DefaultMutator;
-import evodef.BanditLandscapeModel;
 import utilities.StatSummary;
 
-import java.util.Arrays;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import java.util.Random;
 
-public class SimpleRMHC implements EvoAlg {
+public class CRMHC {
 
     // Random mutation hill climber for testing one-max
     static Random random = new Random();
 
     int[] bestYet;
+    public int[] bestYetOp;
 
     int[] seed;
+    int[] opSeed;
     // SolutionEvaluator evaluator
     SearchSpace searchSpace;
 
     private int nSamples;
 
-    public SimpleRMHC() {
+    public CRMHC() {
         this(1);
     }
 
-    public SimpleRMHC(int nSamples) {
+    public CRMHC(int nSamples) {
         this.nSamples = nSamples;
     }
 
@@ -52,14 +54,15 @@ public class SimpleRMHC implements EvoAlg {
     public static boolean resampleParent = true;
 
 
-    public void setInitialSeed(int[] seed) {
+    public void setInitialSeed(int[] seed, int[] opSeed) {
 
         this.seed = seed;
+        this.opSeed = opSeed;
     }
 
     Mutator mutator;
 
-    public SimpleRMHC setMutator(Mutator mutator) {
+    public CRMHC setMutator(Mutator mutator) {
         this.mutator = mutator;
         return this;
     }
@@ -69,10 +72,10 @@ public class SimpleRMHC implements EvoAlg {
      * @param maxEvals
      * @return: the solution coded as an array of int
      */
-    @Override
-    public int[] runTrial(SolutionEvaluator evaluator, int maxEvals) {
+    public ArrayList<int[]> runTrial(GameAdapter evaluator, GameAdapter evaluatorOp, int maxEvals) {
         init(evaluator);
-        StatSummary fitBest = fitness(evaluator, bestYet, new StatSummary());
+        StatSummary fitBest = fitness(evaluator, bestYet, bestYetOp, new StatSummary());
+        StatSummary fitBestOp = fitness(evaluatorOp, bestYetOp, bestYet, new StatSummary());
 
         // create a mutator if it has not already been made
         if (mutator == null)
@@ -81,29 +84,18 @@ public class SimpleRMHC implements EvoAlg {
             mutator.setSearchSpace(searchSpace);
 
         while (evaluator.nEvals() < maxEvals && !evaluator.optimalFound()) {
-            // System.out.println("nEvals: " + evaluator.nEvals());
             int[] mut = mutator.randMut(bestYet);
-            // int[] mut = randMutAll(bestYet);
-            // int[] mut = randAll(bestYet);
-
-            int oneBits = 0;
-            for (int x:bestYet)
-                oneBits+=x;
-            if (oneBits == 10 && TestFHT.foundOpt == false) {
-                TestFHT.foundOpt = true;
-                // System.out.println("Stumbled on opt: " + Arrays.toString(a));
-            }
-
+            int[] mutOp = mutator.randMut(bestYetOp);
 
             // keep track of how much we want to mutate this
             int prevEvals = evaluator.nEvals();
-            StatSummary fitMut = fitness(evaluator, mut, new StatSummary());
+            StatSummary fitMut = fitness(evaluator, mut, bestYetOp, new StatSummary());
+            StatSummary fitMutOp = fitness(evaluatorOp, mutOp, bestYet, new StatSummary());
             if (accumulateBestYetStats) {
-                fitBest = fitness(evaluator, bestYet, fitBest);
-
+                fitBest = fitness(evaluator, bestYet, bestYetOp, fitBest);
             } else {
                 if (resampleParent) {
-                    fitBest = fitness(evaluator, bestYet, new StatSummary());
+                    fitBest = fitness(evaluator, bestYet, bestYetOp, new StatSummary());
                 }
             }
             // System.out.println(fitBest.mean() + " : " + fitMut.mean());
@@ -111,25 +103,15 @@ public class SimpleRMHC implements EvoAlg {
                 // System.out.println("Updating best");
                 bestYet = mut;
                 fitBest = fitMut;
-
-
-
                 evaluator.logger().keepBest(mut, fitMut.mean());
-
-
-                // now check whether it is better than optimal by epsilon
-                // this is for noisy optimisation only
-
-                if (noisy) {
-                    Double opt = evaluator.optimalIfKnown();
-                    if (opt != null) {
-                        if (fitMut.mean() >= opt + epsilon) {
-                            return bestYet;
-                        }
-                    }
-                }
             }
 
+            if (fitMutOp.mean() >= fitBestOp.mean()) {
+                // System.out.println("Updating best");
+                bestYetOp = mutOp;
+                fitBestOp = fitMutOp;
+                evaluator.logger().keepBest(mut, fitMut.mean());
+            }
 
             int evalDiff = evaluator.nEvals() - prevEvals;
             for (int i = 0; i < evalDiff; i++) {
@@ -139,29 +121,27 @@ public class SimpleRMHC implements EvoAlg {
         }
         // System.out.println("Ran for: " + evaluator.nEvals());
         // System.out.println("Sampling rate: " + nSamples);
-        return bestYet;
+        ArrayList<int[]> results = new ArrayList<>();
+        results.add(bestYet);
+        results.add(bestYetOp);
+        return results;
     }
 
     BanditLandscapeModel model;
 
-    @Override
+
     public void setModel(BanditLandscapeModel nTupleSystem) {
         this.model = nTupleSystem;
     }
 
-    @Override
+
     public BanditLandscapeModel getModel() {
         return model;
     }
 
-    @Override
-    public EvolutionLogger getLogger() {
-        return evaluator.logger();
-    }
-
-    StatSummary fitness(SolutionEvaluator evaluator, int[] sol, StatSummary ss) {
+    StatSummary fitness(GameAdapter evaluator, int[] sol, int[] opSol, StatSummary ss) {
         for (int i = 0; i < nSamples; i++) {
-            double fitness = evaluator.evaluate(sol);
+            double fitness = evaluator.evaluate(sol, opSol);
             // System.out.println((int) fitness + "\t " + Arrays.toString(sol));
             ss.add(fitness);
         }
@@ -172,15 +152,14 @@ public class SimpleRMHC implements EvoAlg {
         return ss;
     }
 
-    SolutionEvaluator evaluator;
-
-    private void init(SolutionEvaluator evaluator) {
-        this.evaluator = evaluator;
+    private void init(GameAdapter evaluator) {
         this.searchSpace = evaluator.searchSpace();
         if (seed == null) {
             bestYet = SearchSpaceUtil.randomPoint(searchSpace);
+            bestYetOp = SearchSpaceUtil.randomPoint(searchSpace);
         } else {
             bestYet = SearchSpaceUtil.copyPoint(seed);
+            bestYetOp = SearchSpaceUtil.copyPoint(opSeed);
         }
     }
 }

@@ -59,7 +59,7 @@ public class TestEASimple {
             System.out.println("Running experiment with following settings:");
             System.out.println("Solution evaluator: " + solutionEvaluator.getClass());
             System.out.format("Use first hitting time    :\t %s\n", useFirstHit);
-            System.out.format("RMHC: (flip at least one) :\t %s\n", DefaultMutator.flipAtLeastOneValueDefault);
+            System.out.format("CRMHC: (flip at least one) :\t %s\n", DefaultMutator.flipAtLeastOneValueDefault);
             System.out.format("Point mutation probability:\t %.4f\n", DefaultMutator.defaultPointProb / nDims);
 
             ElapsedTimer t = new ElapsedTimer();

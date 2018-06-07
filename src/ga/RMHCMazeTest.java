@@ -77,7 +77,7 @@ public class RMHCMazeTest {
         }
         // failed to find a solution
 
-        String title = "RMHC: " + eval(bestYet);
+        String title = "CRMHC: " + eval(bestYet);
         MazeView.showMaze(bestYet, title);
 
         return eval(bestYet);
