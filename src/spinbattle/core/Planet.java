@@ -86,7 +86,7 @@ public class Planet {
 
                     if(shipCount>threshold){
                        //remove the extra ships from the current planet
-                        double removedShips = shipCount*0.2;
+                        double removedShips = shipCount-threshold;
                         shipCount = removedShips;
 
                         //move the removed ships to the neutral planets

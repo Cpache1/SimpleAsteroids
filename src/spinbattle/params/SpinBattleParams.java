@@ -22,17 +22,17 @@ public class SpinBattleParams {
 
 
     // of the arena
-    public int width=1500/*700*/, height=600/*400*/;
+    public int width=800/*700*/, height=600/*400*/;
 
     public int maxTicks = 500;
-    public int nPlanets = 40/*20*/;
+    public int nPlanets = 20/*20*/;
 
     // public int nNeutral = nPlanets - 4;
     // the number to allocate to each player
-    public int nToAllocate = 2;
+    public int nToAllocate = 4;
 
     public double minGrowth =  0.04/*0.05*/;
-    public double maxGrowth =  0.20/*0.15*/;
+    public double maxGrowth =  0.10/*0.15*/;
 
 
     public double spinRatio = 0.6/*0.4*/;
@@ -41,7 +41,7 @@ public class SpinBattleParams {
 
     public int maxInitialShips = 15 /*20*/;
 
-    public double transitSpeed = 5/*3*/;
+    public double transitSpeed = 2/*3*/;
 
 
     // this is for a heuristic AI opponent

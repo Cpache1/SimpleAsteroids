@@ -55,7 +55,7 @@ public class Transporter {
             }
             payload -= params.transportTax;
 
-            if (payload<=1){ //if the value goes to zero
+            if (payload<=0){ //if the value goes to zero
 
                 terminateJourney();
             }
