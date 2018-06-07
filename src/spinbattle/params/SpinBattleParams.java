@@ -34,12 +34,15 @@ public class SpinBattleParams {
     public double minGrowth =  0.04/*0.05*/;
     public double maxGrowth =  0.20/*0.15*/;
 
+
     public double spinRatio = 0.6/*0.4*/;
 
     public int minInitialShips = 5;
-    public int maxInitialShips =  15 /*20*/;
 
-    public double transitSpeed =  5/*3*/;
+    public int maxInitialShips = 15 /*20*/;
+
+    public double transitSpeed = 5/*3*/;
+
 
     // this is for a heuristic AI opponent
     public int releasePeriod = 400;
@@ -61,6 +64,7 @@ public class SpinBattleParams {
     //this transfers the extra ships (if there are more than the upper limit) to one random neutral planet
     public boolean makeExtraShipsNeutral = true;
     //this transfers the extra ships (if there are more than the upper limit) equally to the neutral planets
+
 
 
     public SpinBattleParams copy() {

@@ -66,7 +66,7 @@ public class Planet {
     // todo: Probably here the trajectory update and termination needs to be done
     public Planet update(SpinGameState gameState) {
 
-        if (ownedBy != Constants.neutralPlayer && ownedBy != Constants.deathPlayer) {
+        if (ownedBy != Constants.neutralPlayer && ownedBy != Constants.deathPlayer) { //if it isn't neutral
             shipCount += growthRate;
 
             if (params.upperLimit){
@@ -162,6 +162,7 @@ public class Planet {
     Planet setOwnership(int ownedBy) {
         this.ownedBy = ownedBy;
         // also set initial ships
+
 //        shipCount = params.minInitialShips +
 //                params.getRandom().nextInt(params.maxInitialShips - params.minInitialShips);
 
@@ -173,7 +174,6 @@ public class Planet {
             shipCount = params.minInitialShips +
                     params.getRandom().nextInt(params.maxInitialShips - params.minInitialShips);
         }
-
 
         return this;
     }
@@ -194,10 +194,10 @@ public class Planet {
     public String toString() {return position + " : " + ownedBy + " : " + getRadius();
     }
 
+
     public boolean transitReady() {
         return getTransporter() != null && !getTransporter().inTransit();
     }
-
 
     public Transporter getTransporter() {
         //introduced the death player/black hole
