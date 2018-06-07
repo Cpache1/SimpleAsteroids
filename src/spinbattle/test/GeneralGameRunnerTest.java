@@ -1,8 +1,6 @@
 package spinbattle.test;
 
 import agents.evo.EvoAgent;
-import controllers.multiPlayer.discountOLMCTS.SingleMCTSPlayer;
-import controllers.singlePlayer.discountOLMCTS.Agent;
 import ggi.agents.EvoAgentFactory;
 import ggi.core.GameRunnerTwoPlayer;
 import spinbattle.core.SpinGameStateFactory;
