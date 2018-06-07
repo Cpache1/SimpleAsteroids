@@ -6,6 +6,8 @@ import spinbattle.params.Constants;
 import spinbattle.params.SpinBattleParams;
 import spinbattle.view.ParticleEffect;
 
+import spinbattle.core.SpinGameState;
+
 
 public class Planet {
     public Vector2d position;
@@ -19,6 +21,8 @@ public class Planet {
     public int ownedBy;
     SpinBattleParams params;
     Transporter transit;
+
+    SpinGameState gameState;
 
     public Planet copy() {
         Planet planet = new Planet();
@@ -39,13 +43,18 @@ public class Planet {
     Planet processIncoming(double incomingShips, int playerId, SpinGameState gameState) {
         if (ownedBy != playerId) {
             // this is an invasion
-            // decrement the ships, then set to id of incoming player and invert sign if it has gone negative
-            shipCount -= incomingShips;
-            if (shipCount <= 0) {
-                ownedBy = playerId;
-                shipCount = Math.abs(shipCount);
-                // and should make a transporter
-                // transit = getTransporter();
+            if (ownedBy == Constants.deathPlayer){
+                shipCount = 0;
+            }
+            else {
+                // decrement the ships, then set to id of incoming player and invert sign if it has gone negative
+                shipCount -= incomingShips;
+                if (shipCount <= 0) {
+                    ownedBy = playerId;
+                    shipCount = Math.abs(shipCount);
+                    // and should make a transporter
+                    // transit = getTransporter();
+                }
             }
         } else {
             // must be owned by this player already, so add to the tally
@@ -56,8 +65,58 @@ public class Planet {
 
     // todo: Probably here the trajectory update and termination needs to be done
     public Planet update(SpinGameState gameState) {
-        if (ownedBy != Constants.neutralPlayer) {
+
+        if (ownedBy != Constants.neutralPlayer && ownedBy != Constants.deathPlayer) { //if it isn't neutral
             shipCount += growthRate;
+
+            if (params.upperLimit){
+                //check if the players have more than half of the ships in the game
+                if(gameState.getPlayerShips(Constants.playerOne)+gameState.getPlayerShips(Constants.playerTwo)>
+                        gameState.getAllShips()/2){
+
+/*
+                    System.out.println("having more than one third of the total ships");
+                    System.out.println( gameState.getAllShips() + " - "+ gameState.getPlayerShips(Constants.playerOne)+
+                            " - " +gameState.getPlayerShips(Constants.playerTwo));
+*/
+                    //calculate a threshold: fist planets ships+second planets ships / 3 or something like that
+                    double threshold =
+                            (gameState.getPlayerShips(Constants.playerOne) + gameState.getPlayerShips(Constants.playerTwo)) /
+                                (gameState.getPlayerPlanets(Constants.playerOne)+ gameState.getPlayerPlanets(Constants.playerTwo)) ;
+
+                    if(shipCount>threshold){
+                       //remove the extra ships from the current planet
+                        double removedShips = shipCount*0.2;
+                        shipCount = removedShips;
+
+                        //move the removed ships to the neutral planets
+                        if (params.makeExtraShipsNeutral){
+                            //check if there are any neutral planets left
+                            if (gameState.singleOwner() != null) {
+                                boolean foundNeutralPlanet = false;
+                                while (!foundNeutralPlanet) {
+                                    //random planet id
+                                    int randPlanetId = params.getRandom().nextInt(gameState.planets.size());
+
+                                    //check it is neutral, and if so, give it the extra ships and set the flag to true
+                                    if (gameState.planets.get(randPlanetId).ownedBy == Constants.neutralPlayer) {
+                                        gameState.planets.get(randPlanetId).shipCount += removedShips;
+                                        foundNeutralPlanet = true;
+                                    }
+                                }
+
+                            }
+                        }
+
+
+
+                        System.out.println("ship owned by "+ ownedBy+", removed "+ shipCount/2);
+                        //ownedBy = Constants.neutralPlayer;
+                    }
+                }
+
+            }
+
         }
         if (transit != null && transit.inTransit()) {
             transit.next(gameState.vectorField);
@@ -103,8 +162,19 @@ public class Planet {
     Planet setOwnership(int ownedBy) {
         this.ownedBy = ownedBy;
         // also set initial ships
-        shipCount = params.minInitialShips +
-                params.getRandom().nextInt(params.maxInitialShips - params.minInitialShips);
+
+//        shipCount = params.minInitialShips +
+//                params.getRandom().nextInt(params.maxInitialShips - params.minInitialShips);
+
+        //if owned by black holes
+        if (ownedBy == Constants.deathPlayer){
+            shipCount= 0;
+        }
+        else{
+            shipCount = params.minInitialShips +
+                    params.getRandom().nextInt(params.maxInitialShips - params.minInitialShips);
+        }
+
         return this;
     }
 
@@ -121,18 +191,18 @@ public class Planet {
         return (int) (Constants.growthRateToRadius * growthRate);
     }
 
-    public String toString() {
-        return position + " : " + ownedBy + " : " + getRadius();
+    public String toString() {return position + " : " + ownedBy + " : " + getRadius();
     }
+
 
     public boolean transitReady() {
         return getTransporter() != null && !getTransporter().inTransit();
     }
 
-
     public Transporter getTransporter() {
-        // neutral planets cannot release transporters
-        if (ownedBy == Constants.neutralPlayer) return null;
+        //introduced the death player/black hole
+        // neutral planets AND black holes cannot release transporters
+        if (ownedBy == Constants.neutralPlayer || ownedBy == Constants.deathPlayer) return null;
         // if transit is null then make a new one
         if (transit == null)
             transit = new Transporter().setParent(index).setParams(params);
@@ -140,7 +210,8 @@ public class Planet {
     }
 
     public int getScore() {
-        if (ownedBy == Constants.neutralPlayer) return 0;
+        //introduced the deathplayer
+        if (ownedBy == Constants.neutralPlayer || ownedBy == Constants.deathPlayer) return 0;
         int score = 0;
         if (ownedBy == Constants.playerOne) score = (int) shipCount;
         if (ownedBy == Constants.playerTwo) score = (int) -shipCount;

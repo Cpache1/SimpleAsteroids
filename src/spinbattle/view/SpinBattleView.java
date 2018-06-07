@@ -26,7 +26,8 @@ public class SpinBattleView extends JComponent {
     Color[] playerColors = {
             Color.getHSBColor(0.17f, 1, 1),
             Color.getHSBColor(0.50f, 1, 1),
-            Color.lightGray
+            Color.lightGray,
+            Color.black
     };
     Color vectorColor = new Color(1f, 1f, 1f, 0.3f);
     int scoreFontSize = 16;

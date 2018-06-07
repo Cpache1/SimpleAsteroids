@@ -4,7 +4,6 @@ import math.Vector2d;
 import spinbattle.core.Collider;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 public class SpinBattleParams {
@@ -23,24 +22,27 @@ public class SpinBattleParams {
 
 
     // of the arena
-    public int width=700, height=400;
+    public int width=1500/*700*/, height=600/*400*/;
 
     public int maxTicks = 500;
-    public int nPlanets = 20;
+    public int nPlanets = 40/*20*/;
 
     // public int nNeutral = nPlanets - 4;
     // the number to allocate to each player
-    public int nToAllocate = 4;
+    public int nToAllocate = 2;
 
-    public double minGrowth = 0.05;
-    public double maxGrowth = 0.15;
+    public double minGrowth =  0.04/*0.05*/;
+    public double maxGrowth =  0.20/*0.15*/;
 
-    public double spinRatio = 0.4;
+
+    public double spinRatio = 0.6/*0.4*/;
 
     public int minInitialShips = 5;
-    public int maxInitialShips = 20;
 
-    public double transitSpeed = 3;
+    public int maxInitialShips = 15 /*20*/;
+
+    public double transitSpeed = 5/*3*/;
+
 
     // this is for a heuristic AI opponent
     public int releasePeriod = 400;
@@ -51,8 +53,18 @@ public class SpinBattleParams {
 
     public boolean useVectorField = true;
 
-    public double transportTax = 0.0;
-    public double radSep = 1.5;
+    public double transportTax = 0.01 /*zero before*/;
+    public double radSep = 1.2/*1.5*/;
+
+    // upper limit for overall number of ships (NOTE: this works nicely IF the nToAllocate is at least 4. This is because
+    // the threshold is calculated by adding the ships players are having and dividing it by 3. therefore if they're )
+    public boolean upperLimit = true;
+
+    //these are useful if the upperLimit is set to true:
+    //this transfers the extra ships (if there are more than the upper limit) to one random neutral planet
+    public boolean makeExtraShipsNeutral = true;
+    //this transfers the extra ships (if there are more than the upper limit) equally to the neutral planets
+
 
 
     public SpinBattleParams copy() {
@@ -76,6 +88,9 @@ public class SpinBattleParams {
         p.clampZeroScore = clampZeroScore;
         p.transportTax = transportTax;
         p.radSep = radSep;
+
+        p.upperLimit = upperLimit;
+        p.makeExtraShipsNeutral = makeExtraShipsNeutral;
         return p;
     }
 
