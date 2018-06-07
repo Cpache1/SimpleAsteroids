@@ -1,8 +1,6 @@
 package agents.coevo;
 
-import agents.dummy.DoNothingAgent;
-//import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import evodef.PluginEvaluator;
+
 import ggi.core.AbstractGameState;
 import ggi.core.SimplePlayerInterface;
 import plot.NullPlayoutPlotter;

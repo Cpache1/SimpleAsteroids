@@ -48,7 +48,7 @@ public class CRMHC {
 
     static double epsilon = 1.0;
 
-    public static boolean accumulateBestYetStats = false;
+    //public static boolean accumulateBestYetStats = false;
 
     // this is only checked if not resampling parent
     public static boolean resampleParent = true;
@@ -61,9 +61,11 @@ public class CRMHC {
     }
 
     Mutator mutator;
+    Mutator opMutator;
 
-    public CRMHC setMutator(Mutator mutator) {
+    public CRMHC setMutator(Mutator mutator, Mutator opMutator) {
         this.mutator = mutator;
+        this.opMutator = opMutator;
         return this;
     }
 
@@ -80,24 +82,26 @@ public class CRMHC {
         // create a mutator if it has not already been made
         if (mutator == null)
             mutator = new DefaultMutator(searchSpace);
-        else
+        else {
             mutator.setSearchSpace(searchSpace);
+            opMutator.setSearchSpace(searchSpace);
+        }
 
-        while (evaluator.nEvals() < maxEvals && !evaluator.optimalFound()) {
+        while (evaluator.nEvals() < maxEvals ){//&& !evaluator.optimalFound()) {
             int[] mut = mutator.randMut(bestYet);
-            int[] mutOp = mutator.randMut(bestYetOp);
+            int[] mutOp = opMutator.randMut(bestYetOp);
 
             // keep track of how much we want to mutate this
             int prevEvals = evaluator.nEvals();
             StatSummary fitMut = fitness(evaluator, mut, bestYetOp, new StatSummary());
             StatSummary fitMutOp = fitness(evaluatorOp, mutOp, bestYet, new StatSummary());
-            if (accumulateBestYetStats) {
-                fitBest = fitness(evaluator, bestYet, bestYetOp, fitBest);
-            } else {
-                if (resampleParent) {
-                    fitBest = fitness(evaluator, bestYet, bestYetOp, new StatSummary());
-                }
-            }
+//            if (accumulateBestYetStats) {
+//                fitBest = fitness(evaluator, bestYet, bestYetOp, fitBest);
+//            } else {
+//                if (resampleParent) {
+//                    fitBest = fitness(evaluator, bestYet, bestYetOp, new StatSummary());
+//                }
+ //           }
             // System.out.println(fitBest.mean() + " : " + fitMut.mean());
             if (fitMut.mean() >= fitBest.mean()) {
                 // System.out.println("Updating best");
@@ -110,7 +114,7 @@ public class CRMHC {
                 // System.out.println("Updating best");
                 bestYetOp = mutOp;
                 fitBestOp = fitMutOp;
-                evaluator.logger().keepBest(mut, fitMut.mean());
+                evaluatorOp.logger().keepBest(mutOp, fitMutOp.mean());
             }
 
             int evalDiff = evaluator.nEvals() - prevEvals;
@@ -154,12 +158,13 @@ public class CRMHC {
 
     private void init(GameAdapter evaluator) {
         this.searchSpace = evaluator.searchSpace();
+        bestYetOp = SearchSpaceUtil.randomPoint(searchSpace);
         if (seed == null) {
             bestYet = SearchSpaceUtil.randomPoint(searchSpace);
-            bestYetOp = SearchSpaceUtil.randomPoint(searchSpace);
+
         } else {
             bestYet = SearchSpaceUtil.copyPoint(seed);
-            bestYetOp = SearchSpaceUtil.copyPoint(opSeed);
+            //bestYetOp = SearchSpaceUtil.copyPoint(opSeed);
         }
     }
 }

@@ -82,22 +82,15 @@ public class CoEvoAgent implements SimplePlayerInterface {
         return this;
     }
 
-    //SimplePlayerInterface opponent = new DoNothingAgent();
-//
-//    public CoEvoAgent setOpponent(SimplePlayerInterface opponent) {
-//        this.opponent = opponent;
-//        return this;
-//    }
-
     public int[] getActions(AbstractGameState gameState, int playerId) {
         searchSpace = new RegularSearchSpace(sequenceLength, gameState.nActions());
+
         gameAdapter = new GameAdapter().setEvaluator(actionSequencer).setSearchSpace(searchSpace);
         gameAdapterOp = new GameAdapter().setEvaluator(actionSequencerOp).setSearchSpace(searchSpace);
+
         actionSequencer.setGameState(gameState.copy()).setPlayerId(playerId);
-        actionSequencer.playoutPlotter = playoutPlotter;
         actionSequencerOp.setGameState(gameState.copy()).setPlayerId(1 -playerId);
-        actionSequencerOp.playoutPlotter = playoutPlotter;
-        playoutPlotter.reset();
+
         if (solution != null) {
             solution = SearchSpaceUtil.shiftLeftAndRandomAppend(solution, searchSpace);
             opPlan = SearchSpaceUtil.shiftLeftAndRandomAppend(opPlan, searchSpace);

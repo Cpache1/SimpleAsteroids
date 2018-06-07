@@ -18,9 +18,14 @@ public class CoEvoAgentFactory {
         mutator.pointProb = mutationRate;
         mutator.totalRandomChaosMutation = totalRandomMutation;
 
+        DefaultMutator opMutator = new DefaultMutator(null);
+        // setting to true may give best performance
+        opMutator.pointProb = 50;
+        opMutator.totalRandomChaosMutation = totalRandomMutation;
+
         CRMHC searchAlg = new CRMHC();
         searchAlg.setSamplingRate(nResamples);
-        searchAlg.setMutator(mutator);
+        searchAlg.setMutator(mutator, opMutator);
 
         CRMHC evoAlg = searchAlg;
 

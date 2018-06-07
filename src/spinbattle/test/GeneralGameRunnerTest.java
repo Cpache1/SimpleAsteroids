@@ -22,10 +22,12 @@ public class GeneralGameRunnerTest {
         evoAgentFactory.mutationRate = 5;
         evoAgentFactory.totalRandomMutation = true;
 
-        EvoAgent evoAgent = evoAgentFactory.getAgent().setSequenceLength(100);
+        coEvoAgentFactory.useShiftBuffer = true;
+        coEvoAgentFactory.mutationRate = 5;
+        coEvoAgentFactory.totalRandomMutation = true;
 
+        EvoAgent evoAgent = evoAgentFactory.getAgent().setSequenceLength(100);
         CoEvoAgent coEvoAgent = coEvoAgentFactory.getAgent().setSequenceLength(50);
-        //EvoAgent coEvoAgent = evoAgentFactory.getAgent().setSequenceLength(20);
 
         evoAgent.nEvals = 20;
         coEvoAgent.nEvals = 40;
@@ -35,7 +37,7 @@ public class GeneralGameRunnerTest {
 
         runner.setGameFactory(factory);
 
-        for (int i=0; i<100; i++) {
+        for (int i=0; i<500; i++) {
             factory.params.getRandom();//.setSeed(i);
             runner.setPlayersWithoutReset(evoAgent, coEvoAgent);
             runner.playGame();
