@@ -14,7 +14,7 @@ public class ViewTest {
         SpinBattleView view = new SpinBattleView().setParams(params).setGameState(gameState);
         HeuristicLauncher launcher = new HeuristicLauncher();
         new JEasyFrame(view, "Spin Battle Game");
-        for (int i=0; i<1000; i++) {
+        for (int i=0; i<5000; i++) {
             gameState.next(null);
             gameState = (SpinGameState) gameState.copy();
             launcher.makeTransits(gameState, Constants.playerOne);

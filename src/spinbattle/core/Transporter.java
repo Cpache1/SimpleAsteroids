@@ -54,6 +54,9 @@ public class Transporter {
                 outOfBoundsTermination();
             }
             payload -= params.transportTax;
+            if (payload<=1) { //if the value goes to zero
+                terminateJourney();
+            }
         }
         return this;
     }
