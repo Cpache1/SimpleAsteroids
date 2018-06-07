@@ -148,9 +148,11 @@ public class SpinGameState implements AbstractGameState {
     }
 
     static int maxTries = 200;
+    static int blackHoles = 2;
 
     public SpinGameState setPlanets() {
         planets = new ArrayList<>();
+        int b=0;
         int i=0;
         int whichEven = params.getRandom().nextInt(2);
         // int nToAllocate = params.nPlanets - params.nNeutral;
@@ -172,6 +174,16 @@ public class SpinGameState implements AbstractGameState {
 
         // set the neutral ones
         while (planets.size() < params.nPlanets && i++ < maxTries) {
+
+            if (b <= blackHoles){
+                Planet planet = makePlanet(Constants.deathPlayer);
+                if (valid(planet)) {
+                    planet.setIndex(planets.size());
+                    planets.add(planet);
+                }
+                b++;
+            }
+
             Planet planet = makePlanet(Constants.neutralPlayer);
             if (valid(planet)) {
                 planet.setIndex(planets.size());

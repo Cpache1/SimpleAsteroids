@@ -39,13 +39,18 @@ public class Planet {
     Planet processIncoming(double incomingShips, int playerId, SpinGameState gameState) {
         if (ownedBy != playerId) {
             // this is an invasion
-            // decrement the ships, then set to id of incoming player and invert sign if it has gone negative
-            shipCount -= incomingShips;
-            if (shipCount <= 0) {
-                ownedBy = playerId;
-                shipCount = Math.abs(shipCount);
-                // and should make a transporter
-                // transit = getTransporter();
+            if (ownedBy == Constants.deathPlayer){
+                shipCount = 0;
+            }
+            else {
+                // decrement the ships, then set to id of incoming player and invert sign if it has gone negative
+                shipCount -= incomingShips;
+                if (shipCount <= 0) {
+                    ownedBy = playerId;
+                    shipCount = Math.abs(shipCount);
+                    // and should make a transporter
+                    // transit = getTransporter();
+                }
             }
         } else {
             // must be owned by this player already, so add to the tally
