@@ -56,7 +56,7 @@ public class Planet {
 
     // todo: Probably here the trajectory update and termination needs to be done
     public Planet update(SpinGameState gameState) {
-        if (ownedBy != Constants.neutralPlayer) {
+        if (ownedBy != Constants.neutralPlayer && ownedBy != Constants.deathPlayer) { //if it isn't neutral
             shipCount += growthRate;
         }
         if (transit != null && transit.inTransit()) {
@@ -103,8 +103,16 @@ public class Planet {
     Planet setOwnership(int ownedBy) {
         this.ownedBy = ownedBy;
         // also set initial ships
-        shipCount = params.minInitialShips +
-                params.getRandom().nextInt(params.maxInitialShips - params.minInitialShips);
+
+        //if owned by black holes
+        if (ownedBy == Constants.deathPlayer){
+            shipCount = 0;
+        }
+        else{
+            shipCount = params.minInitialShips +
+                    params.getRandom().nextInt(params.maxInitialShips - params.minInitialShips);
+        }
+
         return this;
     }
 
@@ -121,18 +129,16 @@ public class Planet {
         return (int) (Constants.growthRateToRadius * growthRate);
     }
 
-    public String toString() {
-        return position + " : " + ownedBy + " : " + getRadius();
-    }
+    public String toString() {return position + " : " + ownedBy + " : " + getRadius();}
 
     public boolean transitReady() {
         return getTransporter() != null && !getTransporter().inTransit();
     }
 
-
     public Transporter getTransporter() {
-        // neutral planets cannot release transporters
-        if (ownedBy == Constants.neutralPlayer) return null;
+        //introduced the death player/black hole
+        // neutral planets AND black holes cannot release transporters
+        if (ownedBy == Constants.neutralPlayer || ownedBy == Constants.deathPlayer) return null;
         // if transit is null then make a new one
         if (transit == null)
             transit = new Transporter().setParent(index).setParams(params);
@@ -140,7 +146,8 @@ public class Planet {
     }
 
     public int getScore() {
-        if (ownedBy == Constants.neutralPlayer) return 0;
+        //introduced the deathplayer
+        if (ownedBy == Constants.neutralPlayer || ownedBy == Constants.deathPlayer) return 0;
         int score = 0;
         if (ownedBy == Constants.playerOne) score = (int) shipCount;
         if (ownedBy == Constants.playerTwo) score = (int) -shipCount;

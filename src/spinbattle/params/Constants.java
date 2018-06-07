@@ -5,6 +5,7 @@ public interface Constants {
     int playerOne = 0;
     int playerTwo = 1;
     int neutralPlayer = 2;
+    int deathPlayer = 3;
 
     // might move this to params
     // since radius has an effect on game play
