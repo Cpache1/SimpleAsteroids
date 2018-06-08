@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class RoundRobinLeagueTest {
 
-    static int maxTicks = 1000;
+    static int maxTicks = 500;
 
     public static void main(String[] args) {
         // set up some players
