@@ -74,12 +74,8 @@ public class Planet {
                 if(gameState.getPlayerShips(Constants.playerOne)+gameState.getPlayerShips(Constants.playerTwo)>
                         gameState.getAllShips()/2){
 
-/*
-                    System.out.println("having more than one third of the total ships");
-                    System.out.println( gameState.getAllShips() + " - "+ gameState.getPlayerShips(Constants.playerOne)+
-                            " - " +gameState.getPlayerShips(Constants.playerTwo));
-*/
-                    //calculate a threshold: fist planets ships+second planets ships / 3 or something like that
+
+                    //calculate a threshold
                     double threshold =
                             (gameState.getPlayerShips(Constants.playerOne) + gameState.getPlayerShips(Constants.playerTwo)) /
                                 (gameState.getPlayerPlanets(Constants.playerOne)+ gameState.getPlayerPlanets(Constants.playerTwo)) ;
@@ -115,11 +111,6 @@ public class Planet {
                             gameState.planets.get(randPlanetId).shipCount += removedShips;
                             //System.out.println("random planet "+ randPlanetId);
                         }
-
-
-
-
-                        //System.out.println("ship owned by "+ ownedBy+", removed "+ removedShips);
 
                         //ownedBy = Constants.neutralPlayer;
                     }
