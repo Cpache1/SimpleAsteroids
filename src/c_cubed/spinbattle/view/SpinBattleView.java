@@ -83,11 +83,11 @@ public class SpinBattleView extends JComponent {
         // System.out.println("nParticles = " + particles.size());
         if (gameState.logger != null) {
             //
-            SideStack<ParticleEffect> effects = gameState.logger.effects;
-            while (!effects.isEmpty()) {
-                ParticleEffect effect = effects.pop();
-                effect.trigger(particles, gameState.params);
-            }
+            //SideStack<ParticleEffect> effects = gameState.logger.effects;
+            //while (!effects.isEmpty()) {
+            //    ParticleEffect effect = effects.pop();
+            //    effect.trigger(particles, gameState.params);
+            //}
         }
         // now update all the particles
         Iterator<Particle> iterator = particles.iterator();

@@ -125,12 +125,12 @@ public class Planet {
                 // process the inbound
                 destination.processIncoming(transit.payload, transit.ownedBy, gameState);
                 transit.terminateJourney();
-                if (gameState.logger != null) {
-                    ParticleEffect effect = new ParticleEffect().setPosition(destination.position);
-                    effect.setNParticle(20);
-                    // System.out.println(effect);
-                    gameState.logger.logEffect(effect);
-                }
+                //if (gameState.logger != null) {
+                //    ParticleEffect effect = new ParticleEffect().setPosition(destination.position);
+                //    effect.setNParticle(20);
+                //    // System.out.println(effect);
+                //    gameState.logger.logEffect(effect);
+                //}
                 // transit
                 // System.out.println("Terminated Journey: " + transit.inTransit());
             }
