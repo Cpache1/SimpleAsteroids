@@ -62,9 +62,9 @@ public class SpinBattleParams {
 
     //these are useful if the upperLimit is set to true:
     //this transfers the extra ships (if there are more than the upper limit) to one random neutral planet
-    public boolean makeExtraShipsNeutral = true;
-    //this transfers the extra ships (if there are more than the upper limit) equally to the neutral planets
-
+    public boolean makeExtraShipsNeutral = false;
+    //this transfers the extra ships (if there are more than the upper limit) to a random planet
+    public boolean makeExtraShipsRandom =true;
 
 
     public SpinBattleParams copy() {
@@ -91,6 +91,7 @@ public class SpinBattleParams {
 
         p.upperLimit = upperLimit;
         p.makeExtraShipsNeutral = makeExtraShipsNeutral;
+        p.makeExtraShipsRandom = makeExtraShipsRandom;
         return p;
     }
 

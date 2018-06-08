@@ -84,13 +84,14 @@ public class Planet {
                             (gameState.getPlayerShips(Constants.playerOne) + gameState.getPlayerShips(Constants.playerTwo)) /
                                 (gameState.getPlayerPlanets(Constants.playerOne)+ gameState.getPlayerPlanets(Constants.playerTwo)) ;
 
-                    if(shipCount>threshold){
+                    if(shipCount>threshold && shipCount>params.getRandom().nextInt(50)+50){
                        //remove the extra ships from the current planet
-                        double removedShips = shipCount-threshold;
-                        shipCount = removedShips;
+                        double removedShips = shipCount*0.1;
+                        shipCount = shipCount-removedShips;
 
                         //move the removed ships to the neutral planets
                         if (params.makeExtraShipsNeutral){
+
                             //check if there are any neutral planets left
                             if (gameState.singleOwner() != null) {
                                 boolean foundNeutralPlanet = false;
@@ -101,6 +102,7 @@ public class Planet {
                                     //check it is neutral, and if so, give it the extra ships and set the flag to true
                                     if (gameState.planets.get(randPlanetId).ownedBy == Constants.neutralPlayer) {
                                         gameState.planets.get(randPlanetId).shipCount += removedShips;
+                                        System.out.println("neutral planet "+ randPlanetId);
                                         foundNeutralPlanet = true;
                                     }
                                 }
@@ -108,9 +110,15 @@ public class Planet {
                             }
                         }
 
+                        if (params.makeExtraShipsRandom){
+                            int randPlanetId = params.getRandom().nextInt(gameState.planets.size());
+                            gameState.planets.get(randPlanetId).shipCount += removedShips;
+                            System.out.println("random planet "+ randPlanetId);
+                        }
 
 
-                        System.out.println("ship owned by "+ ownedBy+", removed "+ shipCount/2);
+
+                        System.out.println("ship owned by "+ ownedBy+", removed "+ removedShips);
                         //ownedBy = Constants.neutralPlayer;
                     }
                 }
