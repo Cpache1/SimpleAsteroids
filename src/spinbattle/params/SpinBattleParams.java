@@ -64,7 +64,7 @@ public class SpinBattleParams {
     //this transfers the extra ships (if there are more than the upper limit) to one random neutral planet
     public boolean makeExtraShipsNeutral = false;
     //this transfers the extra ships (if there are more than the upper limit) to a random planet
-    public boolean makeExtraShipsRandom =true;
+    public boolean makeExtraShipsRandom =false;
 
 
     public SpinBattleParams copy() {
