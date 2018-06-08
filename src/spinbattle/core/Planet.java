@@ -102,7 +102,7 @@ public class Planet {
                                     //check it is neutral, and if so, give it the extra ships and set the flag to true
                                     if (gameState.planets.get(randPlanetId).ownedBy == Constants.neutralPlayer) {
                                         gameState.planets.get(randPlanetId).shipCount += removedShips;
-                                        System.out.println("neutral planet "+ randPlanetId);
+                                        //System.out.println("neutral planet "+ randPlanetId);
                                         foundNeutralPlanet = true;
                                     }
                                 }
@@ -113,12 +113,14 @@ public class Planet {
                         if (params.makeExtraShipsRandom){
                             int randPlanetId = params.getRandom().nextInt(gameState.planets.size());
                             gameState.planets.get(randPlanetId).shipCount += removedShips;
-                            System.out.println("random planet "+ randPlanetId);
+                            //System.out.println("random planet "+ randPlanetId);
                         }
 
 
 
-                        System.out.println("ship owned by "+ ownedBy+", removed "+ removedShips);
+
+                        //System.out.println("ship owned by "+ ownedBy+", removed "+ removedShips);
+
                         //ownedBy = Constants.neutralPlayer;
                     }
                 }

@@ -1,5 +1,7 @@
 package spinbattle.league;
 
+import agents.coevo.CoEvoAgent;
+import agents.coevo.CoEvoAgentFactory;
 import agents.dummy.DoNothingAgent;
 import agents.dummy.RandomAgent;
 import ggi.agents.EvoAgentFactory;
@@ -21,13 +23,15 @@ public class RoundRobinLeagueTest {
     public static void main(String[] args) {
         // set up some players
         EvoAgentFactory f1 = new EvoAgentFactory();
+        CoEvoAgentFactory f2 = new CoEvoAgentFactory();
         f1.useShiftBuffer = true;
         SimplePlayerInterface p1 = new RandomAgent();
         SimplePlayerInterface p2 = f1.getAgent();
         SimplePlayerInterface p3 = new DoNothingAgent();
+        SimplePlayerInterface p4 = f2.getAgent();
 
         ArrayList<SimplePlayerInterface> players = new ArrayList<>();
-        players.add(p1); players.add(p2); players.add(p3);
+        players.add(p1); players.add(p2); players.add(p3); players.add(p4);
 
         RoundRobinLeague league = new RoundRobinLeague().setPlayers(players);
 
@@ -39,7 +43,7 @@ public class RoundRobinLeagueTest {
         gameRunner.setGameFactory(factory);
         league.gameRunner = gameRunner;
 
-        int gamesPerMatch = 5;
+        int gamesPerMatch = 10;
         league.playGames(gamesPerMatch);
 
         System.out.println(league);

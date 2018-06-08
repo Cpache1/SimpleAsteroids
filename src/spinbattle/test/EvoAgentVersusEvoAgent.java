@@ -27,7 +27,7 @@ public class EvoAgentVersusEvoAgent {
         SpinBattleParams params = new SpinBattleParams();
 
         params.maxTicks = 5000;
-        params.gravitationalFieldConstant *= 0;
+        params.gravitationalFieldConstant *= 1;
         params.transitSpeed *= 6;
         SpinGameState gameState = new SpinGameState().setParams(params).setPlanets();
         gameState.actuators[0] = new SourceTargetActuator().setPlayerId(0);

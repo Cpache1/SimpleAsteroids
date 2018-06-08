@@ -31,8 +31,8 @@ public class CoEvoAgentFactory {
 
         // evoAlg = new SlidingMeanEDA();
 
-        int nEvals = 20;
-        int seqLength = 200;
+        int nEvals = 40;
+        int seqLength = 50;
         CoEvoAgent evoAgent = new CoEvoAgent().setEvoAlg(evoAlg, nEvals).setSequenceLength(seqLength);
         evoAgent.setUseShiftBuffer(useShiftBuffer);
         // evoAgent.setVisual();

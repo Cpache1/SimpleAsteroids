@@ -30,14 +30,14 @@ public class GeneralGameRunnerTest {
         CoEvoAgent coEvoAgent = coEvoAgentFactory.getAgent().setSequenceLength(50);
 
         evoAgent.nEvals = 20;
-        coEvoAgent.nEvals = 40;
+        coEvoAgent.nEvals = 20;
 
         SpinGameStateFactory factory = new SpinGameStateFactory();
         factory.params = new SpinBattleParams();;
 
         runner.setGameFactory(factory);
 
-        for (int i=0; i<500; i++) {
+        for (int i=0; i<100; i++) {
             factory.params.getRandom();//.setSeed(i);
             runner.setPlayersWithoutReset(evoAgent, coEvoAgent);
             runner.playGame();
