@@ -1,16 +1,16 @@
-package spinbattle.test;
+package c_cubed.spinbattle.test;
 
-import c_cubed.coevo.CoEvoAgent;
 import agents.evo.EvoAgent;
+import c_cubed.coevo.CoEvoAgent;
+import c_cubed.coevo.CoEvoAgentFactory;
+import c_cubed.spinbattle.actuator.SourceTargetActuator;
+import c_cubed.spinbattle.core.SpinGameState;
+import c_cubed.spinbattle.log.BasicLogger;
+import c_cubed.spinbattle.params.SpinBattleParams;
+import c_cubed.spinbattle.view.SpinBattleView;
 import ggi.agents.EvoAgentFactory;
 import logger.sample.DefaultLogger;
-import spinbattle.actuator.SourceTargetActuator;
-import spinbattle.core.SpinGameState;
-import spinbattle.log.BasicLogger;
-import spinbattle.params.SpinBattleParams;
-import spinbattle.view.SpinBattleView;
 import utilities.JEasyFrame;
-import c_cubed.coevo.CoEvoAgentFactory;
 
 import java.util.Random;
 

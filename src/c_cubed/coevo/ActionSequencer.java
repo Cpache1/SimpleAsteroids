@@ -1,4 +1,4 @@
-package agents.coevo;
+package c_cubed.coevo;
 
 
 import ggi.core.AbstractGameState;

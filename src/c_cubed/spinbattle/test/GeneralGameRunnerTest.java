@@ -1,13 +1,13 @@
-package spinbattle.test;
+package c_cubed.spinbattle.test;
 
 import agents.evo.EvoAgent;
-import ggi.agents.EvoAgentFactory;
-import ggi.core.GameRunnerTwoPlayer;
-import spinbattle.core.SpinGameStateFactory;
-import spinbattle.params.SpinBattleParams;
-import utilities.ElapsedTimer;
 import c_cubed.coevo.CoEvoAgent;
 import c_cubed.coevo.CoEvoAgentFactory;
+import c_cubed.spinbattle.core.SpinGameStateFactory;
+import c_cubed.spinbattle.params.SpinBattleParams;
+import ggi.agents.EvoAgentFactory;
+import ggi.core.GameRunnerTwoPlayer;
+import utilities.ElapsedTimer;
 
 public class GeneralGameRunnerTest {
     public static void main(String[] args) {

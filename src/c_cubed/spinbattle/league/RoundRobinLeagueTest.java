@@ -1,13 +1,13 @@
-package spinbattle.league;
+package c_cubed.spinbattle.league;
 
-import c_cubed.coevo.CoEvoAgentFactory;
 import agents.dummy.DoNothingAgent;
 import agents.dummy.RandomAgent;
+import c_cubed.coevo.CoEvoAgentFactory;
+import c_cubed.spinbattle.core.SpinGameStateFactory;
 import ggi.agents.EvoAgentFactory;
 import ggi.core.GameRunnerTwoPlayer;
 import ggi.core.SimplePlayerInterface;
 import ggi.league.RoundRobinLeague;
-import spinbattle.core.SpinGameStateFactory;
 
 import java.util.ArrayList;
 

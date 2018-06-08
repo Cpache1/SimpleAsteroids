@@ -1,9 +1,8 @@
-package agents.coevo;
+package c_cubed.coevo;
 
 import evodef.*;
 import utilities.StatSummary;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Random;

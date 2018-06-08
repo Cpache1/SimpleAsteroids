@@ -1,20 +1,20 @@
-package spinbattle.test;
+package c_cubed.spinbattle.test;
 
-import c_cubed.coevo.CoEvoAgent;
-import agents.evo.EvoAgent;
+import c_cubed.spinbattle.actuator.SourceTargetActuator;
+import c_cubed.spinbattle.core.SpinGameState;
+import c_cubed.spinbattle.log.BasicLogger;
+import c_cubed.spinbattle.params.Constants;
+import c_cubed.spinbattle.params.SpinBattleParams;
+import c_cubed.spinbattle.ui.CatapultController;
+import c_cubed.spinbattle.ui.MouseSlingController;
+import c_cubed.spinbattle.view.SpinBattleView;
 import ggi.agents.EvoAgentFactory;
-import logger.sample.DefaultLogger;
-import spinbattle.actuator.SourceTargetActuator;
-import spinbattle.core.SpinGameState;
-import spinbattle.log.BasicLogger;
-import spinbattle.params.SpinBattleParams;
-import spinbattle.view.SpinBattleView;
+import ggi.core.SimplePlayerInterface;
 import utilities.JEasyFrame;
-import c_cubed.coevo.CoEvoAgentFactory;
 
 import java.util.Random;
 
-public class EvoAgentVersusEvoAgent {
+public class HumanCatapultVersusEvoAgent {
 
     public static void main(String[] args) throws Exception {
         // to always get the same initial game
@@ -23,45 +23,40 @@ public class EvoAgentVersusEvoAgent {
 
         params.maxTicks = 5000;
         params.gravitationalFieldConstant *= 1;
-        params.transitSpeed *= 6;
+        params.transitSpeed *= 1;
         SpinGameState gameState = new SpinGameState().setParams(params).setPlanets();
-        gameState.actuators[0] = new SourceTargetActuator().setPlayerId(0);
         gameState.actuators[1] = new SourceTargetActuator().setPlayerId(1);
 
         BasicLogger basicLogger = new BasicLogger();
-        gameState.setLogger(new DefaultLogger());
+        // gameState.setLogger(new DefaultLogger());
         SpinBattleView view = new SpinBattleView().setParams(params).setGameState(gameState);
         String title = "Spin Battle Game" ;
         JEasyFrame frame = new JEasyFrame(view, title + ": Waiting for Graphics");
         frame.setLocation(400, 100);
+        MouseSlingController mouseSlingController = new MouseSlingController();
+        mouseSlingController.setGameState(gameState).setPlayerId(Constants.playerOne);
+
+        CatapultController catapultController = new CatapultController();
+        catapultController.setGameState(gameState).setPlayerId(Constants.playerOne);
+
+        // CaveView.addMouseListener(mouseSlingController);
+        view.addMouseListener(catapultController);
         waitUntilReady(view);
 
-        EvoAgent evoAgent = new EvoAgentFactory().getAgent();//.setVisual();
-        CoEvoAgent coEvoAgent = new CoEvoAgentFactory().getAgent().setVisual();
-        SpinBattleParams falseParams = new SpinBattleParams();
-        falseParams.transitSpeed = 0;
-        falseParams.gravitationalFieldConstant = 0;
-        //evoAgent = new FalseModelAdapter().setParams(falseParams).setPlayer(evoAgent);
+        SimplePlayerInterface evoAgent = new EvoAgentFactory().getAgent().setVisual();
         int[] actions = new int[2];
-
-        evoAgent.setSequenceLength(1000);
-        coEvoAgent.setSequenceLength(500);
-
-        evoAgent.nEvals = 20;
-        coEvoAgent.nEvals = 20;
-
 
 
         for (int i=0; i<=5000 && !gameState.isTerminal(); i++) {
-            actions[0] = evoAgent.getAction(gameState.copy(), 0);
-            actions[1] = coEvoAgent.getAction(gameState.copy(), 1);
-
+            actions[1] = evoAgent.getAction(gameState.copy(), 1);
             gameState.next(actions);
+            // mouseSlingController.update();
+            catapultController.update();
             // launcher.makeTransits(gameState, Constants.playerOne);
             view.setGameState((SpinGameState) gameState.copy());
             view.repaint();
             frame.setTitle(title + " : " + i); //  + " : " + CaveView.getTitle());
-            Thread.sleep(50);
+            Thread.sleep(40);
         }
         System.out.println(gameState.isTerminal());
     }
